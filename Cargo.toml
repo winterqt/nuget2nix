@@ -1,0 +1,19 @@
+[package]
+name = "nuget2nix"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.53"
+camino = "1.0.7"
+dashmap = "5.1.0"
+glob = "0.3.0"
+pico-args = "0.4.2"
+quick-xml = { version = "0.22.0", features = ["serialize"] }
+reqwest = { version = "0.11.9", features = ["rustls-tls", "json"], default-features = false }
+serde = { version = "1.0.136", features = ["derive"] }
+serde_json = "1.0.78"
+tokio = { version = "1.16.1", features = ["rt", "rt-multi-thread", "process", "macros", "sync", "parking_lot"] }
+url = { version = "2.2.2", features = ["serde"] }
