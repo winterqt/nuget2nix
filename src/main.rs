@@ -81,9 +81,18 @@ async fn main() -> anyhow::Result<()> {
     let mut args = Arguments::from_env();
 
     let dir: Utf8PathBuf = args.value_from_str("--directory")?;
-    let nuget_config: Utf8PathBuf = args.value_from_str("--nuget-config")?;
+    let nuget_config = args.value_from_str::<_, Utf8PathBuf>("--nuget-config");
 
-    let repos = get_repos(nuget_config.as_std_path()).await?;
+    let mut repos = Vec::new();
+
+    if let Ok(nuget_config) = nuget_config {
+        repos = get_repos(nuget_config.as_std_path()).await?;
+    }
+
+    if repos.is_empty() {
+        repos.push(Arc::new(NuGet::nuget_org().await?));
+    }
+
     let mut packages = Vec::new();
 
     for mut path in glob(dir.join("**/*.nuspec").as_str())?.map(Result::unwrap) {

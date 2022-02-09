@@ -2,6 +2,8 @@ use dashmap::DashMap;
 use serde::Deserialize;
 use url::Url;
 
+const NUGET_ORG_INDEX_URL: &str = "https://api.nuget.org/v3/index.json";
+
 pub struct NuGet {
     client: reqwest::Client,
     package_base_address: Url,
@@ -26,6 +28,10 @@ impl NuGet {
             package_base_address,
             package_cache: DashMap::new(),
         })
+    }
+
+    pub async fn nuget_org() -> anyhow::Result<NuGet> {
+        NuGet::new(Url::parse(NUGET_ORG_INDEX_URL)?).await
     }
 
     pub async fn exists(&self, package: &str, version: &str) -> bool {
